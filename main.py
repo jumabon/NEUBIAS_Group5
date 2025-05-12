@@ -137,12 +137,16 @@ class SegmentImage(QWidget):
 
         reg_properties = self.container.properties_widget.get_properties()
 
-        region_props = regionprops_table(
-            label_image=labels.data, properties=reg_properties
-        )
+        if len(reg_properties) > 0:
+            region_props = regionprops_table(
+                label_image=labels.data, properties=reg_properties
+            )
 
-        self.container.table_widget._update_table(region_props)
-
+            self.container.table_widget._update_table(region_props)
+        else:
+            napari.utils.notifications.show_warning(
+                "No region property selected, skipping the computing"
+            )
 
 class MeasureRegionProps(QWidget):
     def __init__(self, napari_viewer="napari.viewer.Viewer"):
