@@ -8,6 +8,14 @@ Create a plugin that measures region properties and displays the results as a ta
 4) Display the measured region properties in a table
 5) Optional: Add a logo
 
+- [x] load image from file
+- [-] select image layer 
+- [ ] cache the mask from cell pose
+- [ ] properties extraction function
+- [ ] add the tick boxes for the different properties
+- [ ] add save to file prompt
+- [ ] add a logo
+
 - Watch [this demo video](https://youtu.be/EPGl5ZUeskU) to see the plugin in action
 
 ### Segment cells with Cellpose
