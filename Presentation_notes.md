@@ -20,3 +20,8 @@ class SegmentImage
     - save_as_csv: pull 
     - call measurement
 
+
+# optional
+highlight selected cell from table
+
+

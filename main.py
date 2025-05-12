@@ -1,4 +1,6 @@
 import napari
+import napari.utils
+import napari.utils.notifications
 import skimage
 from cellpose import models
 from napari.layers import Labels
@@ -38,10 +40,11 @@ def apply_cellpose(
 
 
 class SegmentImage(QWidget):
-    def __init__(self, napari_viewer="napari.viewer.Viewer"):
+    def __init__(self,properties_widget:Properties, table_widget:Table , napari_viewer="napari.viewer.Viewer"):
         super().__init__()
         self.viewer = napari_viewer
-
+        self.properties = properties_widget
+        self.table = table_widget
         # Set widget layout
         self.setLayout(QVBoxLayout())
 
@@ -107,15 +110,35 @@ class SegmentImage(QWidget):
         return self.viewer.layers[self._image_layers.currentText()]
 
     def _run_segmentation(self):
+        from skimage.measure import regionprops_table
         input_img = self._get_selected_image_layer()
         use_gpu = self.gpu_checkbox.isChecked()
 
-        labels = apply_cellpose(
-            input_img=input_img,
-            use_gpu=use_gpu,
-        )
+        # check if label is already there
+        layer_name = f"{input_img.name}_cellpose"
+        matching_layers = [l for l in self.viewer.layers if l.name == layer_name]
+        
+        if len(matching_layers)==0:
+            napari.utils.notifications.show_info(f"Computing {layer_name}, it may take a while")
+            labels = apply_cellpose(
+                input_img=input_img,
+                use_gpu=use_gpu,
+            )
 
-        self.viewer.add_layer(labels)
+            self.viewer.add_layer(labels)
+        else:
+            #get labels from existing layer
+            assert len(matching_layers)==1, "wait what ??"
+            napari.utils.notifications.show_info(f"Found existing {layer_name}, using it !")
+            labels = matching_layers[0]
+            
+        reg_properties = self.properties.get_properties()
+
+        region_props = regionprops_table(
+            label_image=labels.data,
+            properties=reg_properties)
+        
+        self.table._update_table(region_props)
 
 
 class MeasureRegionProps(QWidget):
@@ -126,9 +149,13 @@ class MeasureRegionProps(QWidget):
         self.setLayout(QVBoxLayout())
 
         tab_widget = QTabWidget()
-        main_widget = SegmentImage(napari_viewer=self.viewer)
         properties_widget = Properties(napari_viewer=self.viewer)
         table_widget = Table(napari_viewer=self.viewer)
+        main_widget = SegmentImage(
+            properties_widget=properties_widget,
+            table_widget=table_widget,
+            napari_viewer=self.viewer
+            )
         tab_widget.addTab(main_widget, "Main")
         tab_widget.addTab(properties_widget, "Properties")
         tab_widget.addTab(table_widget, "Table")
