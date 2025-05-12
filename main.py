@@ -51,7 +51,7 @@ class SegmentImage(QWidget):
         # Add logo
         logo_widget = QWidget()
         logo_widget.setLayout(QHBoxLayout())
-        logo_path = "Analyst/Day1/napari-plugin/Practicals/institut_pasteur_logo.jpg"
+        logo_path = "institut_pasteur_logo.jpg"
         logo_img = QPixmap(logo_path)
         logo_size_inner = QSize(220, 70)
         logo_size_outer = QSize(230, 80)
