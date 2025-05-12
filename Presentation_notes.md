@@ -8,7 +8,9 @@
 - where does the save go ?
 
 # Structure
-class properties
+The Segment image has the properties and table tabs as contructor parameters
+
+class Properties
     - check boxes
     - function get_properties that gives back list of checked properties as a whaetever skimage requires
 
@@ -20,6 +22,8 @@ class SegmentImage
     - save_as_csv: pull 
     - call measurement
 
+New structure:
+- the container is passed as a argument of the init, the tabs call each other to pass commands
 
 # issues
 - too many lines
