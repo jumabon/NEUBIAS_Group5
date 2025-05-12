@@ -16,6 +16,9 @@ from qtpy.QtWidgets import (
 )
 from skimage.util import img_as_float
 
+from properties import Properties
+from table import Table
+
 
 def apply_cellpose(
     input_img: "napari.layers.Image",
@@ -123,12 +126,12 @@ class MeasureRegionProps(QWidget):
         self.setLayout(QVBoxLayout())
 
         tab_widget = QTabWidget()
-        some_widget = QWidget()
-        segment_widget = SegmentImage(napari_viewer=self.viewer)
-        some_widget = QWidget()
-        tab_widget.addTab(segment_widget, "Tab0")
-        tab_widget.addTab(some_widget, "Tab1")
-        tab_widget.addTab(some_widget, "Tab2")
+        main_widget = SegmentImage(napari_viewer=self.viewer)
+        properties_widget = Properties(napari_viewer=self.viewer)
+        table_widget = Table(napari_viewer=self.viewer)
+        tab_widget.addTab(main_widget, "Main")
+        tab_widget.addTab(properties_widget, "Properties")
+        tab_widget.addTab(table_widget, "Table")
         self.layout().addWidget(tab_widget)
 
 
