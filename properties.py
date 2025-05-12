@@ -2,7 +2,7 @@ from qtpy.QtWidgets import QCheckBox, QVBoxLayout, QWidget
 
 
 class Properties(QWidget):
-    def __init__(self, napari_viewer="napari.viewer.Viewer()"):
+    def __init__(self, napari_viewer="napari.viewer.Viewer()", container=None):
         super().__init__()
 
         self.setLayout(QVBoxLayout())
@@ -61,6 +61,10 @@ class Properties(QWidget):
         self.checkboxes = []
         for prop in self.props:
             self.checkboxes.append(QCheckBox(prop))
+            if container is not None:
+                self.checkboxes[-1].toggled.connect(
+                    container.main_widget._run_segmentation
+                )
 
         for checkbox in self.checkboxes:
             self.layout().addWidget(checkbox)

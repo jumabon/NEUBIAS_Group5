@@ -8,7 +8,7 @@ from qtpy.QtWidgets import (
 
 
 class Table(QWidget):
-    def __init__(self, napari_viewer="napari.viewer.Viewer()"):
+    def __init__(self, napari_viewer="napari.viewer.Viewer()", container=None):
         super().__init__()
 
         self.setLayout(QVBoxLayout())
