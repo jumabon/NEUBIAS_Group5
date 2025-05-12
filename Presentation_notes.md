@@ -1,13 +1,22 @@
+# Presentation notes
+
+## Caching the cellpose results
 - cache the segmentation in a napari layer
+- check if this exists
+
+## Saving to CSV
+oops we forgot
+- where does the save go ?
+
+## Checking a properties triggers the recomputing
+
+## Tabs communication structure
 - tabs as wdiget
     - split into different files so that we can work each on it
     - figure out the connection
         - tab1 constructor takes the tab2 and tab3 as input ot be able to orchestrate the calls ?
 
-
-- where does the save go ?
-
-# Structure
+### Structure
 The Segment image has the properties and table tabs as contructor parameters
 
 class Properties
@@ -25,9 +34,6 @@ class SegmentImage
 New structure:
 - the container is passed as a argument of the init, the tabs call each other to pass commands
 
-# issues
-- too many lines
-- checking the box should redo measures
 
 # optional
 highlight selected cell from table
