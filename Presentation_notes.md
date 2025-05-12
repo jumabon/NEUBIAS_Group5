@@ -21,6 +21,10 @@ class SegmentImage
     - call measurement
 
 
+# issues
+- too many lines
+- checking the box should redo measures
+
 # optional
 highlight selected cell from table
 

@@ -40,11 +40,10 @@ def apply_cellpose(
 
 
 class SegmentImage(QWidget):
-    def __init__(self,properties_widget:Properties, table_widget:Table , napari_viewer="napari.viewer.Viewer"):
+    def __init__(self,container, napari_viewer="napari.viewer.Viewer"):
         super().__init__()
         self.viewer = napari_viewer
-        self.properties = properties_widget
-        self.table = table_widget
+        self.container = container
         # Set widget layout
         self.setLayout(QVBoxLayout())
 
@@ -132,13 +131,13 @@ class SegmentImage(QWidget):
             napari.utils.notifications.show_info(f"Found existing {layer_name}, using it !")
             labels = matching_layers[0]
             
-        reg_properties = self.properties.get_properties()
+        reg_properties = self.container.properties_widget.get_properties()
 
         region_props = regionprops_table(
             label_image=labels.data,
             properties=reg_properties)
         
-        self.table._update_table(region_props)
+        self.container.table_widget._update_table(region_props)
 
 
 class MeasureRegionProps(QWidget):
@@ -149,16 +148,21 @@ class MeasureRegionProps(QWidget):
         self.setLayout(QVBoxLayout())
 
         tab_widget = QTabWidget()
-        properties_widget = Properties(napari_viewer=self.viewer)
-        table_widget = Table(napari_viewer=self.viewer)
-        main_widget = SegmentImage(
-            properties_widget=properties_widget,
-            table_widget=table_widget,
-            napari_viewer=self.viewer
+        self.properties_widget = Properties(
+            napari_viewer=self.viewer,
+            container=self
             )
-        tab_widget.addTab(main_widget, "Main")
-        tab_widget.addTab(properties_widget, "Properties")
-        tab_widget.addTab(table_widget, "Table")
+        self.table_widget = Table(
+            napari_viewer=self.viewer,
+            container=self
+            )
+        self.main_widget = SegmentImage(
+            napari_viewer=self.viewer,
+            container=self
+            )
+        tab_widget.addTab(self.main_widget, "Main")
+        tab_widget.addTab(self.properties_widget, "Properties")
+        tab_widget.addTab(self.table_widget, "Table")
         self.layout().addWidget(tab_widget)
 
 
