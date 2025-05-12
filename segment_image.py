@@ -10,6 +10,7 @@ from qtpy.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
+    QTabWidget,
     QVBoxLayout,
     QWidget,
 )
@@ -114,9 +115,27 @@ class SegmentImage(QWidget):
         self.viewer.add_layer(labels)
 
 
+class MeasureRegionProps(QWidget):
+    def __init__(self, napari_viewer="napari.viewer.Viewer"):
+        super().__init__()
+        self.viewer = napari_viewer
+
+        self.setLayout(QVBoxLayout())
+
+        tab_widget = QTabWidget()
+        some_widget = QWidget()
+        segment_widget = SegmentImage(napari_viewer=self.viewer)
+        some_widget = QWidget()
+        tab_widget.addTab(segment_widget, "Tab0")
+        tab_widget.addTab(some_widget, "Tab1")
+        tab_widget.addTab(some_widget, "Tab2")
+        self.layout().addWidget(tab_widget)
+
+
 if __name__ == "__main__":
     IMAGE2D = skimage.data.cells3d()[30, 1]
     viewer = napari.view_image(IMAGE2D)
-    widget = SegmentImage(napari_viewer=viewer)
+    # widget = SegmentImage(napari_viewer=viewer)
+    widget = MeasureRegionProps(napari_viewer=viewer)
     viewer.window.add_dock_widget(widget)
     napari.run()
